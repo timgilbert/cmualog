@@ -4,7 +4,7 @@
 
 (def lib 'net.clojars.cmulog/cmulog)
 (def version "0.1.0-SNAPSHOT")
-(def main 'cmulog.cmulog)
+(def main 'cmulog.ingest)
 
 (defn test "Run the tests." [opts]
   (bb/run-tests opts))
