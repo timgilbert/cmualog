@@ -1,7 +1,3 @@
-;; TODO, add JVM options if needed:
-;--add-opens=java.base/java.nio=ALL-UNNAMED
-;--add-opens=java.base/sun.nio.ch=ALL-UNNAMED
-
 {:paths ["src" "resources"]
  :deps  {org.clojure/clojure       {:mvn/version "1.10.3"}
          com.taoensso/timbre       {:mvn/version "5.1.2"}
@@ -10,7 +6,9 @@
          datalevin/datalevin       {:mvn/version "0.6.0"}
          com.cognitect/transit-clj {:mvn/version "1.0.324"}}
  :aliases
- {:run   {:main-opts ["-m" "cmulog.main"]}
+ {:run   {:main-opts ["-m" "cmulog.main"]
+          :jvm-opts  ["--add-opens=java.base/java.nio=ALL-UNNAMED"
+                      "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED"]}
   :build {:deps       {io.github.seancorfield/build-clj
                        {:git/tag   "v0.6.3" :git/sha "9b8e09b"
                         ;; since we're building an app uberjar, we do not
@@ -20,4 +18,6 @@
   :test  {:extra-paths ["test"]
           :extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
           :exec-fn     kaocha.runner/exec-fn
-          :exec-args   {}}}}
+          :exec-args   {}
+          :jvm-opts  ["--add-opens=java.base/java.nio=ALL-UNNAMED"
+                      "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED"]}}}

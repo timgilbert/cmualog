@@ -33,7 +33,11 @@
      :opts        [{:option  "cmu-root"
                     :as      "Root directory of the CMUdict project"
                     :type    :string
-                    :default "../cmudict"}]}]})
+                    :default "../cmudict"}
+                   {:option  "db-url"
+                    :as      "URL for the datalevin server (directory or dtlv:// URL)"
+                    :type    :string
+                    :default "./data"}]}]})
 
 
 (defn -main [& args]
