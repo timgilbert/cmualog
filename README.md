@@ -1,17 +1,17 @@
-# cmulog/cmulog
+# cmualog
 
 Some experiments in getting the venerable [CMU Dict](https://github.com/cmusphinx/cmudict)
 into datalog via [datalevin](https://github.com/juji-io/datalevin).
 
 ## Installation
 
-Download from https://github.com/cmulog/cmulog
+Download from https://github.com/cmualog/cmualog
 
 ## Usage
 
 Run the project directly, via `:exec-fn`:
 
-    $ clojure -X:run-x
+    $ clojure -X:run
     Hello, Clojure!
 
 Run the project, overriding the name to be greeted:
@@ -19,7 +19,7 @@ Run the project, overriding the name to be greeted:
     $ clojure -X:run-x :name '"Someone"'
     Hello, Someone!
 
-Run the project directly, via `:main-opts` (`-m cmulog.cmulog`):
+Run the project directly, via `:main-opts` (`-m cmualog.cmualog`):
 
     $ clojure -M:run-m
     Hello, World!

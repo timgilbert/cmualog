@@ -1,7 +1,7 @@
-(ns cmulog.main
+(ns cmualog.main
   (:require [taoensso.timbre :as log]
             [cli-matic.core :as cli-matic]
-            [cmulog.ingest :as ingest])
+            [cmualog.ingest :as ingest])
   (:gen-class))
 
 (def logging-config
@@ -19,7 +19,7 @@
       1)))
 
 (def cli-options
-  {:command     "cmulog"
+  {:command     "cmualog"
    :description "cmudict to datalog ingestion tool"
    :version     "0.1.0"
    :opts        [{:option "debug"

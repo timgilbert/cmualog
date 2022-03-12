@@ -2,9 +2,9 @@
   (:refer-clojure :exclude [test])
   (:require [org.corfield.build :as bb]))
 
-(def lib 'net.clojars.cmulog/cmulog)
+(def lib 'net.clojars.cmualog/cmualog)
 (def version "0.1.0-SNAPSHOT")
-(def main 'cmulog.ingest)
+(def main 'cmualog.ingest)
 
 (defn test "Run the tests." [opts]
   (bb/run-tests opts))

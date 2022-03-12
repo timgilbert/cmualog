@@ -1,6 +1,6 @@
-(ns cmulog.cmulog-test
+(ns cmualog.cmualog-test
   (:require [clojure.test :refer :all]
-            [cmulog.ingest :refer :all]))
+            [cmualog.ingest :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

@@ -1,4 +1,4 @@
-(ns cmulog.ingest
+(ns cmualog.ingest
   (:require [taoensso.timbre :as log]
             [puget.printer :as puget]
             [datalevin.core :as d]
