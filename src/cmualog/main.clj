@@ -11,6 +11,7 @@
 (defn run-command [command args]
   (log/merge-config! logging-config)
   (log/set-level! (if (:debug args) :debug :info))
+  (log/debug "Debug logging enabled")
   (try
     ; process exit code
     (or (command args) 0)

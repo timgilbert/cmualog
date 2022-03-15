@@ -51,10 +51,6 @@ Run that uberjar:
 
 If you remove `version` from `build.clj`, the uberjar will become `target/cmulog-standalone.jar`.
 
-## Options
-
-FIXME: listing of options this app accepts.
-
 ## License
 
 Copyright © 2022 Tim Gilbert

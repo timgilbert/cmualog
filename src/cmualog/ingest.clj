@@ -27,6 +27,8 @@
                          :doc       "For an item in a sorted list, the item"}
    :variant/word    #:db{:valueType :db.type/ref
                          :doc       "The word this variant refers to"}
+   :variant/comment #:db{:valueType :db.type/string
+                         :doc       "cmudict comments"}
    :variant/name    #:db{:valueType :db.type/string
                          :unique    :db.unique/identity
                          :doc       "The name of this variant, eg 'contrasts(2)'"}
@@ -66,25 +68,31 @@
              :item [:symbol/name s]})
     symbols))
 
-(defn parse-dict-line [_conn line]
+(defn parse-dict-line [line]
   ;; Skip comments
+  (log/debugf "Parsing: %s" line)
   (when-not (re-find #"^(;;;|##)" line)
-    (let [[variant & symbol-strs] (string/split line #"\s+")
+    (let [;; Extract "# comment about pat of speech"
+          [_match definition comment] (re-find #"^(^[^#]+)(?:\s+#(.*))?$" line)
+          [variant & symbol-strs] (string/split definition #"\s+")
           symbols (map keyword symbol-strs)
+          ;; Parse "adverse(3)" into ["adverse", "3"]
           [_match word pos] (re-find #"^([^(]+)\(?(\d+)?\)?" variant)]
       [{:db/id -1 :word/name word}
-       #:variant{:name    variant
-                 :word    -1
-                 :pos     (if pos (Integer/parseInt pos) 0)
-                 :symbols (build-symbol-list symbols)}])))
+       (merge
+         #:variant{:name    variant
+                   :word    -1
+                   :pos     (if pos (Integer/parseInt pos) 0)
+                   :symbols (build-symbol-list symbols)}
+         (when comment #:variant{:comment comment}))])))
 
-(defn parse-symbol-line [_conn line]
+(defn parse-symbol-line [line]
   (let [[match phone-name stress-str] (re-find #"^(\D+)(\d*)$" line)]
     {:symbol/name   (keyword match)
      :symbol/phone  [:phone/name (keyword phone-name)]
      :symbol/stress (symbol-stress stress-str)}))
 
-(defn parse-phone-line [_conn line]
+(defn parse-phone-line [line]
   (let [[name phonetic-class] (map keyword (string/split line #"\s+"))]
     {:phone/name  name
      :phone/class phonetic-class}))
@@ -93,8 +101,11 @@
   (log/infof "Parsing file %s/%s" cmu-root filename)
   (try
     (with-open [reader (io/reader (io/file cmu-root filename))]
-      (let [tx-data (mapv (partial line-fn conn) (line-seq reader))]
-        (some->> tx-data doall log/spy (d/transact! conn))))))
+      (doseq [[line-number line] (map vector (range) (line-seq reader))
+              :let [tx-data (line-fn line)]]
+        (some->> tx-data doall (d/transact! conn))))
+    (catch Exception e
+      (log/error e "Error in processing!"))))
 
 (defn ingest
   "Run the main ingestion"

@@ -2,6 +2,9 @@
   (:require [clojure.test :refer :all]
             [cmualog.ingest :refer :all]))
 
+(def bout "'bout B AW1 T")
+
 (deftest a-test
   (testing "FIXME, I fail."
-    (is (= 0 1))))
+    (let [result (parse-dict-line bout)]
+      (is (some? result)))))
