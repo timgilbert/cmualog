@@ -1,7 +1,7 @@
 (ns cmualog.main
   (:require [taoensso.timbre :as log]
             [cli-matic.core :as cli-matic]
-            [cmualog.ingest :as ingest])
+            [cmualog.cmudict :as ingest])
   (:gen-class))
 
 (def logging-config
@@ -28,11 +28,11 @@
                   :type   :with-flag
                   :short  "d"}]
    :subcommands
-   [{:command     "ingest"
+   [{:command     "ingest-cmu"
      :description "Read in metadata from BQ and save it to a file"
      :runs        (partial run-command ingest/ingest)
      :opts        [{:option  "cmu-root"
-                    :as      "Root directory of the CMUdict project"
+                    :as      "Root directory of the cmudict project"
                     :type    :string
                     :default "../cmudict"}
                    {:option  "db-url"

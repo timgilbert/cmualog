@@ -1,4 +1,4 @@
-(ns cmualog.ingest
+(ns cmualog.cmudict
   (:require [taoensso.timbre :as log]
             [puget.printer :as puget]
             [datalevin.core :as d]
@@ -68,7 +68,7 @@
              :item [:symbol/name s]})
     symbols))
 
-(defn parse-dict-line [line]
+(defn parse-dict-line [_line-number line]
   ;; Skip comments
   (log/debugf "Parsing: %s" line)
   (when-not (re-find #"^(;;;|##)" line)
@@ -86,13 +86,13 @@
                    :symbols (build-symbol-list symbols)}
          (when comment #:variant{:comment comment}))])))
 
-(defn parse-symbol-line [line]
+(defn parse-symbol-line [_line-number line]
   (let [[match phone-name stress-str] (re-find #"^(\D+)(\d*)$" line)]
     {:symbol/name   (keyword match)
      :symbol/phone  [:phone/name (keyword phone-name)]
      :symbol/stress (symbol-stress stress-str)}))
 
-(defn parse-phone-line [line]
+(defn parse-phone-line [_line-number line]
   (let [[name phonetic-class] (map keyword (string/split line #"\s+"))]
     {:phone/name  name
      :phone/class phonetic-class}))
@@ -102,7 +102,7 @@
   (try
     (with-open [reader (io/reader (io/file cmu-root filename))]
       (doseq [[line-number line] (map vector (range) (line-seq reader))
-              :let [tx-data (line-fn line)]]
+              :let [tx-data (line-fn line-number line)]]
         (some->> tx-data doall (d/transact! conn))))
     (catch Exception e
       (log/error e "Error in processing!"))))
